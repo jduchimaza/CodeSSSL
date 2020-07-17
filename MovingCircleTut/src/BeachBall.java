@@ -3,14 +3,14 @@ import java.awt.Toolkit;
 
 public class BeachBall {
 	private Image ball;
-	private int x = 0, y = 0;
+	private int x = 0, y = 0, w = 100, h = 100;
 	
 	// default constructor
 	public BeachBall() {
 		// get the image we want to use and use it
 		ball = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("beach_ball.png"));
 		// resize the image
-		scaleBall(40,40);
+		scaleBall(w,h);
 	}
 	
 	// get the image of the ball
@@ -25,6 +25,13 @@ public class BeachBall {
 	public int getY() {
 		return y;
 	}
+	public int getWidth() {
+		return w;
+	}
+	public int getHeight() {
+		return h;
+	}
+	
 	
 	// set x
 	public void setX(int x2) {
@@ -37,7 +44,9 @@ public class BeachBall {
 	
 	// scale down the image
 	public void scaleBall(int width, int height) {
-		ball = ball.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		w = width;
+		h = height;
+		ball = ball.getScaledInstance(w, h, Image.SCALE_SMOOTH);
 	}
 
 }

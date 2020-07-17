@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -17,14 +18,22 @@ import javax.swing.Timer;
 
 public class MyPanel extends JPanel implements ActionListener, KeyListener, MouseListener{
 	
+	/**
+	 * 
+	 */
+	// just added this to get rid of the warning
+	private static final long serialVersionUID = 1L;
+	
 	Timer t = new Timer(1,this);
 	double x = 0, y = 0, chX = 0, chY = 0;
-	double enX = 400; 
-	BeachBall myBall; // NEWLINE
+	int width = 40, height = 40;
+	//double enX = 400; 
+	BeachBall myBall;
 	int mX=0, mY=0;
+	Ellipse2D ball;
 	
 	public MyPanel(){
-		myBall = new BeachBall(); // NEWLINE
+		myBall = new BeachBall(); 
 		t.start();
 		addKeyListener(this);
 		addMouseListener(this);
@@ -36,8 +45,11 @@ public class MyPanel extends JPanel implements ActionListener, KeyListener, Mous
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g; // mention casting here
-		g2.fill(new Ellipse2D.Double(x,y,40,40));
-		//g2.drawImage(myBall.getBall(), (int) x, (int) y, null);	// NEWLINE
+		ball = new Ellipse2D.Double(x,y,width,height);
+		g2.fill(ball);
+		// Deprecated line to draw a beach ball
+		//g2.drawImage(myBall.getBall(), (int) x, (int) y, null);
+		g2.setColor(Color.red);
 		g2.fill(new Rectangle2D.Double(400,400,10,100)); // Draw a rectangle
 		//                              x   y   w   h
 	}
@@ -45,33 +57,59 @@ public class MyPanel extends JPanel implements ActionListener, KeyListener, Mous
 	// I had to move actionPerformed up here - didn't need to, just for the logic
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		repaint();
 		x += chX;
 		y += chY;
-		if (x+40 > 400 && x < 500 && y-40 > 400 && y < 500) {
+		//width = myBall.getWidth();
+		//height = myBall.getHeight();
+		
+		// Check for collision against wall
+		if (x+width > 400 && x < 410 && y+height > 400 && y < 500) {
 			x -= chX;
-			//y -= chY;
+			y -= chY;
+			reset();
+		}
+		
+		// Wrap around screen boundaries
+		if (x > this.getWidth()) {
+			x=0;
+		}
+		else if (x+width < 0) {
+			x = this.getWidth();
+		}
+		if (y > this.getHeight()) {
+			y = 0;
+		}
+		else if (y+height < 0) {
+			y = this.getHeight();
 		}
 
 	}
 	
 	public void up() {
-		chX = 0;
+		//chX = 0;
 		chY = -1.5;
 	}
 	public void down() {
-		chX = 0;
+		//chX = 0;
 		chY = 1.5;
 	}
 	public void left() {
 		chX = -1.5;
-		chY = 0;
+		//chY = 0;
 	}
 	public void right() {
 		chX = 1.5;
-		chY = 0;
+		//chY = 0;
 	}
 	public void stop() {
+		chX = 0;
+		chY = 0;
+	}
+	public void reset() {
+		x = 0;
+		y = 0;
 		chX = 0;
 		chY = 0;
 	}
@@ -96,6 +134,9 @@ public class MyPanel extends JPanel implements ActionListener, KeyListener, Mous
 		}
 		if (code == KeyEvent.VK_RIGHT) {
 			right();
+		}
+		if (code == KeyEvent.VK_SPACE) {
+			reset();
 		}
 	}
 

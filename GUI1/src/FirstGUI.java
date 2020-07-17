@@ -17,7 +17,7 @@ public class FirstGUI implements ActionListener {
 	private JPanel panel;
 	
 	public FirstGUI() {
-		 frame = new JFrame(); // create a frame
+		frame = new JFrame(); // create a frame
 		
 		JButton button = new JButton("Click Me"); // create button
 		button.addActionListener(this);
